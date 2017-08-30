@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     String input = "";
     float answer;
     Button op;
+    boolean recentslv, decimalpressed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,28 +39,43 @@ public class MainActivity extends AppCompatActivity {
             case R.id.bin7:
             case R.id.bin8:
             case R.id.bin9:
-            case R.id.binDecimal:
-
+                if(recentslv){
+                    input = "";
+                    recentslv = false;
+                }
                 //Log.d("test",""+((Button)view).getText());
                 updateInput(((Button)view).getText().toString());
                 updateTextView(input);
                 break;
 
-
+            case R.id.binDecimal:
+                if(!decimalpressed) {
+                    if(recentslv){
+                        input = "";
+                        recentslv = false;
+                    }
+                    updateInput(((Button) view).getText().toString());
+                    updateTextView(input);
+                    decimalpressed = true;
+                }
+                break;
 
             case R.id.binMultiply:
             case R.id.binMinus:
             case R.id.binPlus:
             case R.id.binDivide:
                 operate((Button)view);
+                decimalpressed = false;
                 break;
 
             case R.id.binClear:
                 clear();
+                decimalpressed = false;
                 break;
 
             case R.id.binEnter:
                 solve();
+                decimalpressed = false;
                 break;
 
             case R.id.binSign:
@@ -78,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void solve() {
         operate(null);
-        input = "";
+        input = ""+answer;
+        recentslv = true;
     }
 
     private void clear() {
@@ -89,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void operate(Button b) {
-        Log.d("operate","op");
+        //Log.d("operate","op");
         if(op != null){
             if(input.compareTo("") != 0){
                 switch (op.getId()){
@@ -117,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
         else{
-            Log.d("Tag", "operate: " + input);
+            //Log.d("Tag", "operate: " + input);
             answer = Float.parseFloat(input);
         }
         op = b;
